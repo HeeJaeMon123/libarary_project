@@ -1,0 +1,195 @@
+Sapiens
+Yuval Noah Harari
+history
+Guns, Germs, and Steel
+Jared Diamond
+역사
+A Little History of the World
+Gombrich
+역사
+Eichmann in Jerusalem
+Hannah Arendt
+역사
+The Lessons of History 
+Will Durant
+역사
+On Politics
+Alan Ryan
+역사
+What is History
+E Carr
+역사
+The Age of Empire
+Eric Hobsbawm
+역사
+Justice
+Michael J Sandel
+철학
+On Liberty
+John Stuart Mill
+철학
+The Order of Time
+Carlo Rovelli
+철학
+Ways of Seeing
+John Berger
+철학
+Aristotle's Way
+Edith Hall
+철학
+The Critique of Practical Reason
+Immanuel Kant
+철학
+Thus Spake Zarathustra
+Friedrich Nietzsche
+철학
+Discourse on Method
+Rene Descartes
+철학
+Fashionary Bag Design
+Fashionary
+예술
+Korean Art from 1953
+Shim Chung Yeon
+예술
+The Story of Art
+Gombrich
+예술
+The Complete Color Harmony
+Leatrice Eiseman
+예술
+Matisse
+Volkmar Essers
+예술
+The Work of Art in the Age of Mechanical Reproduction
+Walter Benjamin
+예술
+The Art of Travel
+Alain de Botton
+여행
+Who Was Abraham Lincoln
+Janet B Pascal
+여행
+Seoul, The Monocle Travel Guide Series
+Joe Pickard
+여행
+Cereal City Guide: New York
+Rosa Park
+여행
+A Walk in the Woods
+Bill Bryson
+여행
+Clanlands
+Sam Heughan
+여행
+To Kill a Mockingbird
+Harper Lee
+문학
+Hunger Games
+Suzanne Collins
+문학
+My Sister's Keeper
+Jodi Picoult
+문학
+Fault In Our Stars
+John Green
+문학
+Giver
+Lois Lowry
+문학
+Outsiders
+SE Hinton
+문학
+Kite Runner
+Khaled Hosseini
+문학
+Fahrenheit 451
+Ray Bradbury
+문학
+Lord of the Flies
+William Golding
+문학
+Uglies
+Scott Westerfeld
+문학
+Elements Physical Chemistry
+Peter Atkins
+과학
+Concepts of Nanochemistry
+Ludovico Cademartiri
+과학
+Organic Chemistry
+Solomons
+과학
+Inorganic chemistry
+Huey
+과학
+Unit Operation of Chemical Engineering
+MaCabe
+과학
+Fluid Mechanics for Chemical Engineers
+Nevers
+과학
+Transport Processes and Unit Operations
+Darby
+과학
+Electrochemical methods
+Bard Wiley
+과학
+Best American Science And Nature Writing
+Mary Roach
+과학
+What if
+Randall MunRoe
+과학
+Deep Work
+Cal Newport
+IT
+The Hidden Language of Computer Hardward and Software
+Charles Petzold
+IT
+Seven Languages in Seven Weeks
+Bruce Tate
+IT
+Computer Networking
+James F Kurose
+IT
+Databases in Seven Weeks
+Eric Redmond
+IT
+Head First C
+David Griffiths
+IT
+Absolute C
+Walter Savitch
+IT
+Introduction to Java Programming
+Daniel Liang
+IT
+New Ideas from Dead Economists
+Martin Feldstein
+경제
+Poverty and Profit in the American City
+Matthew Desmond
+경제
+Business Adventures
+John Brooks
+경제
+Superintelligence Strategies
+Nick Bostrom
+경제
+Intelligent Investor
+Benjamin Graham
+경제
+The Remains of the Day
+Kazuo Ishiguro
+경제
+Portfolios
+Daryl Collins
+경제
+World Order
+Henry Kissinger
+경제
+Competing Against Time
+George Stalk
+경제
