@@ -145,7 +145,7 @@ int main() {
 	FILE* fin;
 	fin = fopen("booklist.txt", "r+");
 	int l;
-	for (l = 0; l < 5; l++) {
+	for (l = 0; l < 65; l++) {
 		fgets(str, 81, fin);
 		strncpy(inf[l].name, str, sizeof(str));
 		fgets(str, 81, fin);
