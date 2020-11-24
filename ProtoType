@@ -1,282 +1,330 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <time.h>
 #include <string.h>
+#include <fcntl.h>
 typedef struct Node {
-	char name[80];
-	char author[80];
-	char kind[10]; //분야
+        char name[80];
+        char author[80];
+        char kind[10]; //분야
 }info;
 
-//info inf[200];
 int size = 0;
 void print(info *n,int size) {
-	info * n1 = malloc(sizeof(info)*size);
-	int i;
-	for (i = 0; i < size; i++) {
-		n1[i] = n[i];
-	}
-	int l;
-	for (l = 0; l < size; l++) {
-		printf("%s", n1[l].name);
-	}
-	free(n1);
+        info * n1 = malloc(sizeof(info)*size);
+        int i;
+        for (i = 0; i < size; i++) {
+                n1[i] = n[i];
+        }
+        int l;
+        for (l = 0; l < size; l++) {
+                printf("%s", n1[l].name);
+        }
+        free(n1);
 }
 void sortByName(info *n, int size) {//bubble sort
-	int i, j;
-	info * n1 = malloc(sizeof(info)*size);
-	info t;
-	int k;
-	for (k = 0; k < size; k++) {
-		n1[k] = n[k];
-	}
-	for ( i = 0; i < size-1; i++) {
-		for (j = 0; j < size - i - 1; j++) {
-			if (strcmp(n1[j].name, n1[j + 1].name) > 0) {
-				t = n1[j];
-				n1[j] = n1[j + 1];
-				n1[j + 1] = t;
-			}
-		}
-	}
-	print(n1,size);
-	free(n1);
+        int i, j;
+        info * n1 = malloc(sizeof(info)*size);
+        info t;
+        int k;
+        for (k = 0; k < size; k++) {
+                n1[k] = n[k];
+        }
+        for ( i = 0; i < size-1; i++) {
+                for (j = 0; j < size - i - 1; j++) {
+                        if (strcmp(n1[j].name, n1[j + 1].name) > 0) {
+                                t = n1[j];
+                                n1[j] = n1[j + 1];
+                                n1[j + 1] = t;
+                        }
+                }
+        }
+        print(n1,size);
+        free(n1);
 }
 void sortByAuthor(info *n, int size) {//bubble sort
-	int i, j;
-	info * n1 = malloc(sizeof(info)*size);
-	info t;
-	int k;
-	for (k = 0; k < size; k++) {
-		n1[k] = n[k];
-	}
-	for (i = 0; i < size; i++) {
-		for (j = 0; j < size - i - 1; j++) {
-			if (strcmp(n1[j].author, n1[j + 1].author) > 0) {
-				t = n1[j];
-				n1[j] = n1[j + 1];
-				n1[j + 1] = t;
-			}
-		}
-	}
-	print(n1, size);
-	free(n1);
+        int i, j;
+        info * n1 = malloc(sizeof(info)*size);
+        info t;
+        int k;
+        for (k = 0; k < size; k++) {
+                n1[k] = n[k];
+        }
+        for (i = 0; i < size; i++) {
+                for (j = 0; j < size - i - 1; j++) {
+                        if (strcmp(n1[j].author, n1[j + 1].author) > 0) {
+                                t = n1[j];
+                                n1[j] = n1[j + 1];
+                                n1[j + 1] = t;
+                        }
+                }
+        }
+        print(n1, size);
+        free(n1);
 }
-/*void readBook(char * str) {
-	char * buf;
-	sprintf(buf, "cat %s", str);
-	system(buf);
-}*/
+void readBook() {
+        char c[80];
+        printf("읽을 책 이름 : ");
+        scanf("%s", c);
+        int fd;
+        fd = open(c, O_RDWR);
+        int n;
+        printf("얼마나 읽을 건가요? : ");
+        scanf("%d", &n);
+        lseek(fd, 0, SEEK_SET);
+        char buf[80];
+        int b = read(fd, buf, n);
+        write(STDOUT_FILENO, buf, b);
+        printf("\n");
+
+}
 void searchByChar(info *n, char c) {
-	info find[50];
-	int bufSize = 0;
-	int t;
-	for (t = 0; t < size; t++) {
-		if (n[t].name[0] == c) {
-			find[bufSize] = n[t];
-			bufSize++;
-		}
-	}
-	int ans;
-	printf("정렬하시겠습니까?(0/1)\n");
-	scanf("%d", &ans);
-	if (ans == 1) {
-		int choice;
-		printf("1. 이름으로 정렬\n");
-		printf("2. 저자 이름으로 정렬\n");
-		scanf(" %d", &choice);
-		if (choice == 1) {
-			sortByName(find, bufSize);
-		}
-		else {
-			sortByAuthor(find, bufSize);
-		}
-	}
-	else {
-		int t1;
-		for (t1 = 0; t1 < bufSize; t1++) {
-			printf("%s", find[t1].name);
-		}
-	}
+        info find[50];
+        int bufSize = 0;
+        int t;
+        for (t = 0; t < size; t++) {
+                if (n[t].name[0] == c) {
+                        find[bufSize] = n[t];
+                        bufSize++;
+                }
+        }
+        int ans;
+        printf("정렬하시겠습니까?(0/1)");
+        scanf("%d", &ans);
+        if (ans == 1) {
+                int choice;
+                printf("1. 이름으로 정렬\n");
+                printf("2. 저자 이름으로 정렬\n");
+                scanf(" %d", &choice);
+                if (choice == 1) {
+                        sortByName(find, bufSize);
+                }
+                else {
+                        sortByAuthor(find, bufSize);
+                }
+        }
+        else {
+                int t1;
+                for (t1 = 0; t1 < bufSize; t1++) {
+                        printf("%s", find[t1].name);
+                }
+        }
 }
 void searchByName(info *n, char *str) {
-	int i,j;
-	for (i = 0; i < size; i++) {
-		if (!strcmp(n[i].name, str)) {
-			printf("책 이름 : %s",n[i].name);
-			printf("저자 : %s", n[i].author);
-			printf("책 종류 : %s", n[i].kind);
-		}
-			
-	}
-	
+        int i,j;
+        for (i = 0; i < size; i++) {
+                if (!strcmp(n[i].name, str)) {
+                        printf("책 이름 : %s",n[i].name);
+                        printf("저자 : %s", n[i].author);
+                        printf("책 종류 : %s", n[i].kind);
+                }
+
+        }
+
 }
 void searchByAuthor(info *n, char * str) {
+        int i, j;
+        for (i = 0; i < size; i++) {
+                if (!strcmp(n[i].author, str)) {
+                        printf("책 이름 : %s", n[i].name);
+                        printf("저자 : %s", n[i].author);
+                        printf("책 종류 : %s", n[i].kind);
+                }
 
-	
+        }
+
 }
 void searchByKind(info *n, char * str) {
+        int i, j;
+        for (i = 0; i < size; i++) {
+                if (!strcmp(n[i].kind, str)) {
+                        printf("책 이름 : %s", n[i].name);
+                        printf("저자 : %s", n[i].author);
+                        printf("책 종류 : %s", n[i].kind);
+                }
 
+        }
 }
 void QandA() {
-	char str[80];
-	scanf("%s", str);
+        FILE *in;
+        char str[80];
+        if ((in = fopen("q_and_a", "a")) == NULL)
+                perror("fopen:");
+        gets(str);
+        strcat(str, "\n");
+        fputs(str, in);
+        fclose(in);
+//      while (getchar() != '\n');
 }
 void reservation() {
 
+
+        printf("책이 예약되었습니다. 일주일안에 찾아가세요.\n");
 }
-
-
 void remainSeat() {
-	srand(time(NULL));
-	printf("%d개 좌석이 남았습니다.\n",((rand()%45)+1));
+        srand(time(NULL));
+        printf("%d개 좌석이 남았습니다.\n",((rand()%45)+1));
 }
 
 
 int main() {
-	info inf[200];
-	int p;
-	for (p = 3; p > 0; p--) {
-		printf("프로젝트가 %d 초 후에 시작됩니다.\n",p);
-		//sleep(1);
-	}
-	char str[80];
-	FILE* fin;
-	fin = fopen("booklist.txt", "r+");
-	int l;
-	for (l = 0; l < 65; l++) {
-		fgets(str, 81, fin);
-		strncpy(inf[l].name, str, sizeof(str));
-		fgets(str, 81, fin);
-		strncpy(inf[l].author, str, sizeof(str));
-		fgets(str, 81, fin);
-		strncpy(inf[l].kind, str, sizeof(str));
-		size++;
-	}
+        info inf[200];
+        int p;
+        for (p = 3; p > 0; p--) {
+                printf("프로젝트가 %d 초 후에 시작됩니다.\n",p);
+                sleep(1);
+        }
+        struct timeval start, end;
+        gettimeofday(&start, NULL);
+        char str[80];
+        FILE* fin;
+        fin = fopen("booklist", "r+");
+        int l;
+        for (l = 0; l < 65; l++) {
+                fgets(str, 81, fin);
+                strncpy(inf[l].name, str, sizeof(str));
+                fgets(str, 81, fin);
+                strncpy(inf[l].author, str, sizeof(str));
+                fgets(str, 81, fin);
+                strncpy(inf[l].kind, str, sizeof(str));
+                size++;
+        }
+        int user_connection;
+        printf("1. 오프라인 접속\n");
+        printf("2. 과기대 앱 접속\n");
+        scanf("%d", &user_connection);
+        while (1) {
+                if (user_connection == 1) {
+                        printf("******도서관리 프로그램******\n");
+                        printf("메뉴를 선택하시오\n");
+                        printf("1. 책 목록 출력하기\n");
+                        printf("2. 책 빌리기\n");
+                        printf("3. 책 읽기\n");
+                        printf("4. 책 기증(추가)\n");
+                        printf("5. 책 검색\n");
+                        printf("6. 쉬기\n");
+                        printf("7. 종료\n");
+                        printf("*****************************\n");
+                        int user_choice;
+                        scanf("%d", &user_choice);
+                        if (user_choice == 1) {
+                                /* 책 목록 출력 함수 호출 */
+                                printf("정렬하시겠습니까? (0/1) : ");
+                                int c1;
+                                scanf("%d", &c1);
+                                if (c1==1) {
+                                        sortByName(inf, size);
+                                }
+                                else {
+                                        print(inf,size);
+                                }
+                        }
+                        else if (user_choice == 2) {
+                                /* 책을 빌리는 함수 호출 */
+                        }
+                        else if (user_choice == 3) {
+                                /* 책을 읽는 함수 호출 */
+                                readBook();
+                        }
+                        else if (user_choice == 4) {
+                                /* 책을 기증하는 함수 호출 */
+                        }
+                        else if (user_choice == 5) {
+                                /* 책을 검색하는 함수 호출 */
+                                printf("1. 책 이름의 첫번째 글자만으로 검색\n");
+                                printf("2. full name으로 검색\n");
+                                printf("3. 저자 이름으로 검색\n");
+                                printf("4. 분야 별로 검색\n");
+                                int choice;
+                                scanf("%d", &choice);
+                                if (choice == 1) {
+                                        printf("첫번째 글자를 대문자로 입력해 주세요. : ");
+                                        char c;
+                                        while (getchar() != '\n');
+                                        scanf("%c", &c);
+                                        searchByChar(inf,c);
+                                }
+                                else if(choice == 2) {
+                                        char c[80];
+                                        printf("책이름을 입력해 주세요. : ");
+                                        while (getchar() != '\n');
+                                        gets(c);
+                                        strcat(c, "\n");
+                                        searchByName(inf, c);
+                                }
+                                else if (choice == 3) {
+                                        char c[80];
+                                        printf("저자 이름을 입력해 주세요. : ");
+                                        while (getchar() != '\n');
+                                        gets(c);
+                                        strcat(c, "\n");
+                                        searchByAuthor(inf, c);
+                                }
+                                else {
+                                        printf("책 종류를 입력해 주세요. : ");
+                                        char c[80];
+                                        while (getchar() != '\n');
+                                        gets(c);
+                                        strcat(c, "\n");
+                                        searchByKind(inf, c);
+                                }
+                        }
+                        else if (user_choice == 6) {
+                                /* 쉬는 함수 호출 */
+                                printf("얼마나 쉬겠습니까? : ");
+                        }
+                        else if (user_choice == 7) {
+                                /* 프로그램을 종료한다. */
+                                break;
+                        }
+                }
+                else {
+                        printf("******도서관리 프로그램******\n");
+                        printf("메뉴를 선택하시오\n");
+                        printf("1. 앱 이용시간\n");
+                        printf("2. Q&A\n");
+                        printf("3. 독서실 남은 좌석수\n");
+                        printf("4. 책 예약\n");
+                        printf("5. 모바일 신분증\n");
+                        printf("6. 종료\n");
+                        printf("*****************************\n");
+                        int user_choice;
+                        scanf("%d", &user_choice);
+                        if (user_choice == 1) {
+                                /*time 호출 */
+                                gettimeofday(&end, NULL);
+                                printf("%d 초 이용하셨습니다.\n", end.tv_sec - start.tv_sec);
+                        }
+                        else if (user_choice == 2) {
+                                /* 책을 q&a 함수 호출 */
+                                while (getchar() != '\n');
+                                QandA();
+                                //while (getchar() != '\n');
+                        }
+                        else if (user_choice == 3) {
+                                /* 남은 좌석수 함수 호출 */
+                                remainSeat();
+                        }
+                        else if (user_choice == 4) {
+                                /* 책을 예약하는 함수 호출  예약 list를 만들자 */
+                                reservation();
 
-	
-	int user_connection;
-	printf("1. 오프라인 접속\n");
-	printf("2. 과기대 앱 접속\n");
-	scanf("%d", &user_connection);
-	while (1) {
-		if (user_connection == 1) {
-			printf("******도서관리 프로그램******\n");
-			printf("메뉴를 선택하시오\n");
-			printf("1. 책 목록 출력하기\n");
-			printf("2. 책 빌리기\n");
-			printf("3. 책 읽기\n");
-			printf("4. 책 기증(추가)\n");
-			printf("5. 책 검색\n");
-			printf("6. 쉬기\n");
-			printf("7. 종료\n");
-			printf("*****************************\n");
-			int user_choice;
-			scanf("%d", &user_choice);
-			if (user_choice == 1) {
-				/* 책 목록 출력 함수 호출 */
-				printf("정렬하시겠습니까? (0/1) : ");
-				int c1;
-				scanf("%d", &c1);
-				if (c1==1) {
-					sortByName(inf, size);
-				}
-				else {
-					print(inf,size);
-				}
-			}
-			else if (user_choice == 2) {
-				/* 책을 빌리는 함수 호출 */
-			}
-			else if (user_choice == 3) {
-				/* 책을 읽는 함수 호출 */
-			}
-			else if (user_choice == 4) {
-				/* 책을 기증하는 함수 호출 */
-			}
-			else if (user_choice == 5) {
-				/* 책을 검색하는 함수 호출 */
-				printf("1. 책 이름의 첫번째 글자만으로 검색\n");
-				printf("2. full name으로 검색\n");
-				printf("3. 저자 이름으로 검색\n");
-				printf("4. 분야 별로 검색\n");
-				int choice;
-				scanf("%d", &choice);
-				if (choice == 1) {
-					printf("첫번째 글자를 대문자로 입력해 주세요. : ");
-					char c;
-					scanf(" %c", &c);
-					searchByChar(inf,c);
-				}
-				else if(choice == 2) {
-					char c[80];
-					printf("책이름을 입력해 주세요. : ");
-					scanf("%s", c);
-					strcat(c, "\n");
-					searchByName(inf, c);
-				}
-				else if (choice == 3) {
-					char c[80];
-					scanf("%s", c);
-					searchByAuthor(inf, c);
-				}
-				else {
-					char c[80];
-					scanf("%s", c);
-					searchByKind(inf, c);
-				}
-			}
-			else if (user_choice == 6) {
-				/* 쉬는 함수 호출 */
-				printf("얼마나 쉬겠습니까? : ");
-			}
-			else if (user_choice == 7) {
-				/* 프로그램을 종료한다. */
-				break;
-			}
-		}
-		else {
-			printf("******도서관리 프로그램******\n");
-			printf("메뉴를 선택하시오\n");
-			printf("1. 앱 이용시간\n");
-			printf("2. Q&A\n");
-			printf("3. 독서실 남은 좌석수\n");
-			printf("4. 책 예약\n");
-			printf("5. 모바일 신분증\n");
-			printf("6. 종료\n");
-			printf("*****************************\n");
-			int user_choice;
-			scanf("%d", &user_choice);
-			if (user_choice == 1) {
-				/* 책을 time 호출 */
-			}
-			else if (user_choice == 2) {
-				/* 책을 q&a 함수 호출 */
-				QandA();
-			}
-			else if (user_choice == 3) {
-				/* 남은 좌석수 함수 호출 */
-				remainSeat();
-			}
-			else if (user_choice == 4) {
-				/* 책을 예약하는 함수 호출  예약 list를 만들자 */
-				reservation();
-			}
-			else if (user_choice == 5) {
-				printf("-------------------------------------\n");
-				printf("|                       ------      |\n");
-				printf("|   컴퓨터 공학과      |   o  |     |\n");
-				printf("|      홍 길 동        |  /|~ |     |\n");
-				printf("|     18100429         |  / / |     |\n");
-				printf("|                       ------      |\n");
-				printf("-------------------------------------\n");
-			}
-			else if (user_choice == 6) {
-				/* 프로그램을 종료한다. */
-				break;
-			}
-		}
-	}
-
+                        }
+                        else if (user_choice == 5) {
+                                printf("-------------------------------------\n");
+                                printf("|                       ------      |\n");
+                                printf("|   컴퓨터 공학과      |   o  |     |\n");
+                                printf("|      홍 길 동        |  /|~ |     |\n");
+                                printf("|     18100429         |  / / |     |\n");
+                                printf("|                       ------      |\n");
+                                printf("-------------------------------------\n");
+                        }
+                        else if (user_choice == 6) {
+                                /* 프로그램을 종료한다. */
+                                break;
+                        }
+                }
+        }
+        fclose(fin);
 }
