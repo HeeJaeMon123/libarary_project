@@ -4,13 +4,150 @@
 #include <time.h>
 #include <string.h>
 #include <fcntl.h>
+#define MAX_USER 50
 typedef struct Node {
         char name[80];
         char author[80];
         char kind[10]; //분야
 }info;
 
+typedef struct User {
+    char id[20];
+    char passwd[20];
+}USER;
 int size = 0;
+
+USER users[MAX_USER];
+USER user;
+
+void Read_Data()
+{
+    FILE* fp = fopen("user.txt", "a+");
+    int size, i;
+
+    if (fp == NULL)
+    {
+        printf("파일을 열 수 없습니다\n");
+        exit(0);
+    }
+    else
+    {
+        for (i = 0; i < 50; i++) //offset을 옮겨서 아이디와 비빌번호를 구조체 배열에 받음
+        {
+            fseek(fp, i * 40, SEEK_SET);
+            fread(&users[i].id, 20, 1, fp);
+            fread(&users[i].passwd, 20, 1, fp);
+        }
+    }
+    fseek(fp, 0, SEEK_END);
+    fclose(fp);
+}
+
+void Sign_Up() // 회원가입
+{
+    FILE* fp = fopen("user.txt", "a+");
+    USER regi;
+    char reconfirm[20];
+    int i, flag;
+
+    if (fp == NULL)
+    {
+        printf("파일 출력 오류\n");
+        exit(0);
+    }
+    Read_Data();
+
+    system("clear");
+    printf("-----회원가입-----\n");
+    printf("아이디: "); scanf("%s", regi.id);
+    printf("비밀번호: "); scanf("%s", regi.passwd);
+    printf("비밀번호 재확인: "); scanf("%s", reconfirm);
+    while (1) {
+        for (i = 0; i < MAX_USER; i++) {
+            if (strcmp(regi.id, users[i].id) == 0) {
+                printf("-----이미 등록된 아이디입니다-----\n");
+                printf("아이디: "); scanf("%s", regi.id);
+                printf("비밀번호: "); scanf("%s", regi.passwd);
+                printf("비밀번호 재확인: "); scanf("%s", reconfirm);
+            }
+            else {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 1) break;
+
+    }
+    while (1) { // 재확인이 같을 때까지 반복
+        if (strcmp(regi.passwd, reconfirm)) {
+            printf("비밀번호를 다시 입력하세요\n");
+            printf("비밀번호 재확인: ");
+            scanf("%s", &reconfirm);
+        }
+        else break;
+    }
+
+    fseek(fp, sizeof(user), SEEK_SET);
+    if (fwrite(&regi, sizeof(user), 1, fp) != 1) //입력은 아이디와 비밀번호를 파일에 저장
+    {
+        printf("파일 입력 오류\n");
+        exit(0);
+    }
+    fclose(fp);
+}
+
+void login()
+{
+    int i, check = 0, option = 1, flag = 0;;
+
+    while (1) {
+        if (option == 1) {
+            Read_Data();
+            system("clear");
+            printf("-----로그인-----\n");
+            printf("아이디: ");
+            scanf("%s", user.id);
+            printf("비밀번호: ");
+            scanf("%s", user.passwd);
+            check = 0;
+            for (i = 0; i < MAX_USER; i++)
+            {
+                if (strcmp(user.id, users[i].id) == 0 && strcmp(user.passwd, users[i].passwd) == 0)
+                {
+                    printf("로그인 성공\n");
+                    flag = 1;
+                    break;
+                }
+                check++;
+            }
+            if (check == 50) {
+                printf("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.\n");
+                printf("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.\n");
+                while (1) {
+                    printf("-----옵션-----\n");
+                    printf("1. 로그인 다시하기\n");
+                    printf("2. 회원가입하기\n");
+                    printf("번호를 선택하십시오: ");
+                    scanf("%d", &option);
+                    if (option == 1 || option == 2) break;
+                    else continue;
+                }
+            }
+            if (flag == 1) break;
+        }
+        else if (option == 2) {
+            Sign_Up();
+            while (1) {
+                system("clear");
+                printf("-----회원가입 성공-----\n");
+                printf("로그인을 하시려면 1을 입력하세요\n");
+                printf("1 입력하기: ");
+                scanf("%d", &option);
+                if (option == 1) break;
+            }
+        }
+    }
+}
 void print(info *n,int size) {
         info * n1 = malloc(sizeof(info)*size);
         int i;
@@ -79,6 +216,18 @@ void readBook() {
         printf("\n");
 
 }
+void rest()
+{
+    int i;
+    printf("휴식할 시간을 입력하세요(초단위): ");
+    scanf("%d", &i);
+    system("clear");
+    printf("==============\n");
+    printf("휴식  중......\n");
+    printf("==============\n");
+    sleep(i);       //i초만 큼 sleep함
+}
+
 void searchByChar(info *n, char c) {
         info find[50];
         int bufSize = 0;
@@ -146,20 +295,57 @@ void searchByKind(info *n, char * str) {
 
         }
 }
+void donation() // 책을 기증 받는 함수
+{
+    info n;
+    FILE* fp = fopen("booklist", "a+");
+    char name[80];
+    char author[80];
+    char kind[10];
+    while (getchar() != '\n');
+    if (fp == NULL)
+    {
+        printf("책 목록을 열 수 없습니다\n");
+        exit(0);
+    }
+    else {
+        printf("-----책 기증-----\n");
+        printf("제목: "); //fgets(name, sizeof(name), stdin);
+        gets(name);
+        strcat(name, "\n");
+        fputs(name, fp);
+
+        printf("저자: "); //fgets(author, sizeof(author), stdin);
+        gets(author);
+        strcat(author, "\n");
+        fputs(author, fp);
+
+        printf("분야: "); //fgets(kind, sizeof(author), stdin);
+        gets(kind);
+        strcat(kind, "\n");
+        fputs(kind, fp);
+    }
+}
 void QandA() {
         FILE *in;
         char str[80];
         if ((in = fopen("q_and_a", "a")) == NULL)
                 perror("fopen:");
+        printf("질문할 내용을 작성해주세요 : ");
         gets(str);
         strcat(str, "\n");
         fputs(str, in);
         fclose(in);
-//      while (getchar() != '\n');
 }
 void reservation() {
-
-
+        while (getchar() != '\n');
+        system("clear");
+        char name[80];
+        FILE* fp = fopen("reservation.txt", "a+");
+        printf("예약할 책 이름 : ");
+        gets(name);
+        strcat(name, "\n");
+        fputs(name, fp);
         printf("책이 예약되었습니다. 일주일안에 찾아가세요.\n");
 }
 void remainSeat() {
@@ -169,6 +355,7 @@ void remainSeat() {
 
 
 int main() {
+        login();
         info inf[200];
         int p;
         for (p = 3; p > 0; p--) {
@@ -193,23 +380,25 @@ int main() {
         int user_connection;
         printf("1. 오프라인 접속\n");
         printf("2. 과기대 앱 접속\n");
+        printf("옵션을 선택해주세요. : ");
         scanf("%d", &user_connection);
         while (1) {
                 if (user_connection == 1) {
                         printf("******도서관리 프로그램******\n");
                         printf("메뉴를 선택하시오\n");
                         printf("1. 책 목록 출력하기\n");
-                        printf("2. 책 빌리기\n");
-                        printf("3. 책 읽기\n");
-                        printf("4. 책 기증(추가)\n");
-                        printf("5. 책 검색\n");
-                        printf("6. 쉬기\n");
-                        printf("7. 종료\n");
+                        printf("2. 책 읽기\n");
+                        printf("3. 책 기증(추가)\n");
+                        printf("4. 책 검색\n");
+                        printf("5. 쉬기\n");
+                        printf("6. 종료\n");
                         printf("*****************************\n");
+                        printf("옵션을 선택해주세요. : ");
                         int user_choice;
                         scanf("%d", &user_choice);
                         if (user_choice == 1) {
                                 /* 책 목록 출력 함수 호출 */
+                                system("clear");
                                 printf("정렬하시겠습니까? (0/1) : ");
                                 int c1;
                                 scanf("%d", &c1);
@@ -221,21 +410,23 @@ int main() {
                                 }
                         }
                         else if (user_choice == 2) {
-                                /* 책을 빌리는 함수 호출 */
-                        }
-                        else if (user_choice == 3) {
                                 /* 책을 읽는 함수 호출 */
+                                system("clear");
                                 readBook();
                         }
-                        else if (user_choice == 4) {
+                        else if (user_choice == 3) {
                                 /* 책을 기증하는 함수 호출 */
+                                system("clear");
+                                donation(inf, size);
                         }
-                        else if (user_choice == 5) {
+                        else if (user_choice == 4) {
                                 /* 책을 검색하는 함수 호출 */
+                                system("clear");
                                 printf("1. 책 이름의 첫번째 글자만으로 검색\n");
                                 printf("2. full name으로 검색\n");
                                 printf("3. 저자 이름으로 검색\n");
                                 printf("4. 분야 별로 검색\n");
+                                printf("옵션을 선택해주세요. : ");
                                 int choice;
                                 scanf("%d", &choice);
                                 if (choice == 1) {
@@ -270,11 +461,12 @@ int main() {
                                         searchByKind(inf, c);
                                 }
                         }
-                        else if (user_choice == 6) {
+                        else if (user_choice == 5) {
                                 /* 쉬는 함수 호출 */
-                                printf("얼마나 쉬겠습니까? : ");
+                                system("clear");
+                                rest();
                         }
-                        else if (user_choice == 7) {
+                        else if (user_choice == 6) {
                                 /* 프로그램을 종료한다. */
                                 break;
                         }
@@ -289,29 +481,35 @@ int main() {
                         printf("5. 모바일 신분증\n");
                         printf("6. 종료\n");
                         printf("*****************************\n");
+                        printf("옵션을 선택해주세요. : ");
                         int user_choice;
                         scanf("%d", &user_choice);
                         if (user_choice == 1) {
                                 /*time 호출 */
                                 gettimeofday(&end, NULL);
+                                system("clear");
                                 printf("%d 초 이용하셨습니다.\n", end.tv_sec - start.tv_sec);
                         }
                         else if (user_choice == 2) {
                                 /* 책을 q&a 함수 호출 */
                                 while (getchar() != '\n');
+                                system("clear");
                                 QandA();
                                 //while (getchar() != '\n');
                         }
                         else if (user_choice == 3) {
                                 /* 남은 좌석수 함수 호출 */
+                                system("clear");
                                 remainSeat();
                         }
                         else if (user_choice == 4) {
                                 /* 책을 예약하는 함수 호출  예약 list를 만들자 */
+                                system("clear");
                                 reservation();
 
                         }
                         else if (user_choice == 5) {
+                                system("clear");
                                 printf("-------------------------------------\n");
                                 printf("|                       ------      |\n");
                                 printf("|   컴퓨터 공학과      |   o  |     |\n");
