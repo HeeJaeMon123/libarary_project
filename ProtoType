@@ -310,17 +310,17 @@ void donation() // 책을 기증 받는 함수
     }
     else {
         printf("-----책 기증-----\n");
-        printf("제목: "); //fgets(name, sizeof(name), stdin);
+        printf("제목: "); 
         gets(name);
         strcat(name, "\n");
         fputs(name, fp);
 
-        printf("저자: "); //fgets(author, sizeof(author), stdin);
+        printf("저자: "); 
         gets(author);
         strcat(author, "\n");
         fputs(author, fp);
 
-        printf("분야: "); //fgets(kind, sizeof(author), stdin);
+        printf("분야: "); 
         gets(kind);
         strcat(kind, "\n");
         fputs(kind, fp);
