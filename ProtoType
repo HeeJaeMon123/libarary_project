@@ -310,17 +310,17 @@ void donation() // 책을 기증 받는 함수
     }
     else {
         printf("-----책 기증-----\n");
-        printf("제목: "); 
+        printf("제목: "); //fgets(name, sizeof(name), stdin);
         gets(name);
         strcat(name, "\n");
         fputs(name, fp);
 
-        printf("저자: "); 
+        printf("저자: "); //fgets(author, sizeof(author), stdin);
         gets(author);
         strcat(author, "\n");
         fputs(author, fp);
 
-        printf("분야: "); 
+        printf("분야: "); //fgets(kind, sizeof(author), stdin);
         gets(kind);
         strcat(kind, "\n");
         fputs(kind, fp);
@@ -347,6 +347,17 @@ void reservation() {
         strcat(name, "\n");
         fputs(name, fp);
         printf("책이 예약되었습니다. 일주일안에 찾아가세요.\n");
+}
+void Book(){
+        system("clear");
+        printf("읽을 책 입력 : ");
+
+        char buf[80];
+        char result[80];
+
+        scanf("%s", buf);
+        sprintf(result, "cat %s", buf);
+        system(result);
 }
 void remainSeat() {
         srand(time(NULL));
@@ -479,7 +490,8 @@ int main() {
                         printf("3. 독서실 남은 좌석수\n");
                         printf("4. 책 예약\n");
                         printf("5. 모바일 신분증\n");
-                        printf("6. 종료\n");
+                        printf("6. 책 읽기\n");
+                        printf("7. 종료\n");
                         printf("*****************************\n");
                         printf("옵션을 선택해주세요. : ");
                         int user_choice;
@@ -518,7 +530,10 @@ int main() {
                                 printf("|                       ------      |\n");
                                 printf("-------------------------------------\n");
                         }
-                        else if (user_choice == 6) {
+                        else if (user_choice == 6){
+                                Book();
+                        }
+                        else if (user_choice == 7) {
                                 /* 프로그램을 종료한다. */
                                 break;
                         }
